@@ -31,6 +31,17 @@
 
     html, body { height: 100%; overflow: hidden; font-family: var(--font); background: var(--bg); color: var(--text); }
 
+    /* Sidebar collapse */
+    .sidebar { transition: width 0.2s; }
+    .sidebar.collapsed { width: 0 !important; overflow: hidden; padding: 0; }
+    .sidebar-toggle {
+      background: none; border: none; cursor: pointer;
+      color: rgba(255,255,255,0.7); font-size: 20px;
+      padding: 4px 8px; border-radius: 6px;
+      display: flex; align-items: center;
+    }
+    .sidebar-toggle:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
     /* ── NAVBAR ── */
     .navbar {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -66,6 +77,7 @@
       display: flex;
       padding-top: var(--nav-h);
       height: 100vh;
+      overflow: hidden;
     }
 
     /* ── SIDEBAR ── */
@@ -258,6 +270,7 @@
     <div class="brand-icon"><i class="ti ti-building-warehouse"></i></div>
     Warehouse Management System
   </div>
+  <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.7);font-size:22px;padding:4px 8px;border-radius:6px;display:flex;align-items:center;margin-left:8px;"><i class="ti ti-layout-sidebar"></i></button>
   <div class="navbar-right">
     <div class="nav-pill"><i class="ti ti-user"></i> KW20</div>
   </div>
@@ -394,6 +407,19 @@
 
   checkIframe('count');
   checkIframe('product');
+
+  function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('collapsed');
+  }
+
+  // Fix iframe height to fill remaining space
+  function fixIframeHeight() {
+    const navH = document.querySelector('.navbar').offsetHeight;
+    const shell = document.querySelector('.shell');
+    shell.style.height = (window.innerHeight - navH) + 'px';
+  }
+  fixIframeHeight();
+  window.addEventListener('resize', fixIframeHeight);
 </script>
 </body>
 </html>
