@@ -4,23 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Warehouse Management System — KW20</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
 <style>
   :root{
     --navy:#0f172a;
     --navy-soft:#1e293b;
-    --bg:#eef0f4;
-    --card:#ffffff;
-    --green:#16a34a;
+    --bg:#eef1f6;
+    --panel:#ffffff;
+    --text:#1f2430;
+    --muted:#6b7280;
     --green-bright:#22c55e;
-    --green-tile:#e7f6ee;
-    --text:#1f2937;
-    --muted:#8b93a7;
-    --radius:22px;
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   body{
-    font-family:'Segoe UI',system-ui,-apple-system,Roboto,sans-serif;
+    font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
     background:var(--bg);
     color:var(--text);
     min-height:100vh;
@@ -30,107 +29,87 @@
   .topbar{
     position:sticky;top:0;z-index:50;
     background:var(--navy);
-    display:flex;align-items:center;gap:14px;
-    padding:14px 16px;
+    display:flex;align-items:center;gap:12px;
+    padding:12px 16px;height:60px;
   }
   .menu-btn{
-    background:none;border:none;color:#fff;
-    font-size:26px;line-height:1;cursor:pointer;
-    padding:4px;display:flex;align-items:center;
+    background:none;border:none;color:#e2e8f0;
+    font-size:22px;cursor:pointer;padding:6px;
+    display:flex;align-items:center;border-radius:8px;
   }
+  .menu-btn:hover{background:var(--navy-soft);}
   .app-icon{
-    width:44px;height:44px;border-radius:12px;
+    width:34px;height:34px;border-radius:9px;
     background:var(--green-bright);
     display:flex;align-items:center;justify-content:center;
-    color:#fff;font-size:24px;flex-shrink:0;
+    color:#fff;font-size:19px;flex-shrink:0;
   }
-  .topbar h1{
-    color:#fff;font-size:19px;font-weight:700;
-    flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  .topbar-title{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;}
+  .topbar-title h1{
+    color:#fff;font-size:15px;font-weight:600;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.25;
   }
+  .topbar-title span{color:#94a3b8;font-size:11px;font-weight:500;line-height:1.3;}
   .user-pill{
     display:flex;align-items:center;gap:6px;
-    background:var(--navy-soft);
-    border:1px solid #334155;
-    color:#cbd5e1;font-size:14px;font-weight:600;
-    padding:7px 14px;border-radius:999px;flex-shrink:0;
+    background:var(--navy-soft);border:1px solid #334155;
+    color:#cbd5e1;font-size:12.5px;font-weight:600;
+    padding:6px 12px;border-radius:999px;flex-shrink:0;
   }
+  .user-pill i{font-size:14px;}
 
-  /* ── Drawer sidebar ─────────────────────── */
-  .overlay{
-    position:fixed;inset:0;background:rgba(15,23,42,.5);
-    opacity:0;pointer-events:none;transition:opacity .25s;z-index:90;
-  }
+  /* ── Drawer ─────────────────────────────── */
+  .overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);opacity:0;pointer-events:none;transition:opacity .25s;z-index:90;}
   .overlay.open{opacity:1;pointer-events:auto;}
-  .drawer{
-    position:fixed;top:0;left:0;bottom:0;width:280px;max-width:82vw;
-    background:var(--navy);z-index:100;
-    transform:translateX(-100%);transition:transform .28s ease;
-    display:flex;flex-direction:column;
-  }
+  .drawer{position:fixed;top:0;left:0;bottom:0;width:272px;max-width:82vw;background:var(--navy);z-index:100;transform:translateX(-100%);transition:transform .28s ease;display:flex;flex-direction:column;}
   .drawer.open{transform:translateX(0);}
-  .drawer-head{
-    display:flex;align-items:center;gap:12px;
-    padding:18px 16px;border-bottom:1px solid #24324a;
-  }
-  .drawer-head .app-icon{width:38px;height:38px;font-size:20px;}
-  .drawer-head span{color:#fff;font-weight:700;font-size:16px;}
+  .drawer-head{display:flex;align-items:center;gap:10px;padding:16px;border-bottom:1px solid #24324a;}
+  .drawer-head span{color:#fff;font-weight:600;font-size:14px;}
   .drawer nav{flex:1;overflow-y:auto;padding:10px 8px;}
-  .drawer a{
-    display:flex;align-items:center;gap:12px;
-    color:#cbd5e1;text-decoration:none;
-    font-size:15px;font-weight:500;
-    padding:12px 14px;border-radius:12px;margin-bottom:2px;
-  }
-  .drawer a i{font-size:20px;color:var(--green-bright);width:24px;text-align:center;}
+  .drawer a{display:flex;align-items:center;gap:11px;color:#cbd5e1;text-decoration:none;font-size:13.5px;font-weight:500;padding:10px 12px;border-radius:10px;margin-bottom:2px;}
+  .drawer a i{font-size:17px;color:var(--green-bright);width:22px;text-align:center;}
   .drawer a:hover,.drawer a.active{background:var(--navy-soft);color:#fff;}
-  .drawer-foot{
-    padding:14px 16px;border-top:1px solid #24324a;
-    color:#64748b;font-size:12px;
-  }
+  .drawer-foot{padding:12px 16px;border-top:1px solid #24324a;color:#64748b;font-size:11px;}
 
-  /* ── Cards grid ─────────────────────────── */
-  .grid{
-    padding:26px 16px 40px;
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:18px;
-    max-width:1100px;margin:0 auto;
+  /* ── Panel (white rounded container) ────── */
+  .wrap{max-width:760px;margin:0 auto;padding:18px 14px 40px;}
+  .panel-title{
+    font-size:16px;font-weight:600;color:var(--text);
+    text-align:center;padding:6px 0 16px;
   }
-  .card{
-    background:var(--card);
-    border-radius:var(--radius);
-    padding:34px 20px 38px;
-    text-align:center;
+  .panel{
+    background:var(--panel);
+    border-radius:22px;
+    padding:22px 14px 24px;
+    box-shadow:0 4px 20px rgba(17,24,48,.06);
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:26px 10px;
+  }
+  .app{
+    display:flex;flex-direction:column;align-items:center;gap:11px;
     text-decoration:none;color:inherit;
-    display:flex;flex-direction:column;align-items:center;
-    box-shadow:0 1px 3px rgba(15,23,42,.05);
+  }
+  .tile{
+    width:84px;height:84px;border-radius:22px;
+    display:flex;align-items:center;justify-content:center;
     transition:transform .15s, box-shadow .15s;
   }
-  .card:active{transform:scale(.97);}
-  .card:hover{box-shadow:0 8px 24px rgba(15,23,42,.10);transform:translateY(-2px);}
-  .tile{
-    width:104px;height:104px;border-radius:26px;
-    background:var(--green-tile);
-    display:flex;align-items:center;justify-content:center;
-    margin-bottom:26px;
+  .tile i{font-size:40px;}
+  .app:active .tile{transform:scale(.92);}
+  .app:hover .tile{transform:translateY(-3px);box-shadow:0 8px 18px rgba(17,24,48,.14);}
+  .app span{
+    font-size:13.5px;font-weight:500;color:#374151;
+    text-align:center;line-height:1.3;letter-spacing:.005em;
   }
-  .tile i{font-size:52px;color:var(--green);}
-  .card h2{font-size:21px;font-weight:700;color:#111827;margin-bottom:14px;}
-  .card p{font-size:15.5px;line-height:1.5;color:var(--muted);}
 
-  @media(min-width:760px){
-    .grid{grid-template-columns:repeat(3,1fr);padding:34px 24px 60px;}
-  }
-  @media(min-width:1024px){
-    .grid{grid-template-columns:repeat(4,1fr);}
-  }
-  @media(max-width:420px){
-    .tile{width:88px;height:88px;border-radius:22px;margin-bottom:20px;}
+  @media(min-width:560px){
+    .grid{grid-template-columns:repeat(4,1fr);gap:32px 12px;}
+    .tile{width:92px;height:92px;}
     .tile i{font-size:44px;}
-    .card{padding:28px 14px 30px;}
-    .card h2{font-size:18px;}
-    .card p{font-size:14px;}
+    .app span{font-size:14px;}
   }
 </style>
 </head>
@@ -139,7 +118,10 @@
 <header class="topbar">
   <button class="menu-btn" id="menuBtn" aria-label="Open menu"><i class="ti ti-menu-2"></i></button>
   <div class="app-icon"><i class="ti ti-building-warehouse"></i></div>
-  <h1>Warehouse Management System</h1>
+  <div class="topbar-title">
+    <h1>Warehouse Management</h1>
+    <span>KW20 Distribution Center</span>
+  </div>
   <div class="user-pill"><i class="ti ti-user"></i> KW20</div>
 </header>
 
@@ -149,97 +131,49 @@
     <div class="app-icon"><i class="ti ti-building-warehouse"></i></div>
     <span>KW20 WMS</span>
   </div>
-  <nav id="drawerNav"><!-- built from APPS config --></nav>
+  <nav id="drawerNav"></nav>
   <div class="drawer-foot">KW20 Distribution Center</div>
 </aside>
 
-<main class="grid" id="grid"><!-- built from APPS config --></main>
+<div class="wrap">
+  <div class="panel-title">Applications</div>
+  <div class="panel">
+    <div class="grid" id="grid"></div>
+  </div>
+</div>
 
 <script>
 /* ════════════════════════════════════════════════════════════
-   APP LINKS — edit the "url" values here to match your repos.
-   Relative names work if all apps live in the same GitHub
-   Pages repo as this dashboard. If an app is its own repo,
+   APP LINKS — edit "url" to match your repos. Relative names
+   work if apps live in the same GitHub Pages repo. Otherwise
    use the full URL, e.g.
    "https://kiminging115-source.github.io/kw20goodspreparing/"
+   Each app has its own tile color (bg + icon color).
    ════════════════════════════════════════════════════════════ */
 const APPS = [
-  {
-    name: "Count Code Date",
-    desc: "Track and manage inventory count codes and dates",
-    icon: "ti-calendar-check",
-    url: "ccd.html"
-  },
-  {
-    name: "Product Management",
-    desc: "Manage product listings, stock and warehouse data",
-    icon: "ti-cube",
-    url: "productmanagement.html"
-  },
-  {
-    name: "Cycle Count",
-    desc: "Perform stock cycle counts with barcode scanning",
-    icon: "ti-clipboard-list",
-    url: "cyclecount.html"
-  },
-  {
-    name: "Goods Preparation",
-    desc: "Print labels, generate oLPN and scan pick lists",
-    icon: "ti-tags",
-    url: "goodspreparing.html"
-  },
-  {
-    name: "Picking New",
-    desc: "Pick orders with guided scanning and Firebase sync",
-    icon: "ti-shopping-cart",
-    url: "pickingnew.html"
-  },
-  {
-    name: "Picking FC",
-    desc: "Pick fresh and chilled orders with roll tracking",
-    icon: "ti-snowflake",
-    url: "pickingfc.html"
-  },
-  {
-    name: "Loading",
-    desc: "Verify rolls and oLPN at the dock before dispatch",
-    icon: "ti-truck-loading",
-    url: "loading.html"
-  },
-  {
-    name: "Model Monitor",
-    desc: "Monitor picking and loading progress in real time",
-    icon: "ti-device-desktop-analytics",
-    url: "monitor.html"
-  }
+  { name:"Count Code Date",    icon:"ti-calendar-check",           url:"ccd.html",              bg:"#fde0dd", fg:"#e05b45" },
+  { name:"Product Management", icon:"ti-cube",                     url:"productmanagement.html",bg:"#d9e8fd", fg:"#2f80ed" },
+  { name:"Cycle Count",        icon:"ti-clipboard-list",           url:"cyclecount.html",       bg:"#fceccd", fg:"#e0a212" },
+  { name:"Goods Preparation",  icon:"ti-tags",                     url:"goodspreparing.html",   bg:"#fbe1cf", fg:"#f2994a" },
+  { name:"Picking New",        icon:"ti-shopping-cart",            url:"pickingnew.html",       bg:"#d9f4e5", fg:"#22a565" },
+  { name:"Picking FC",         icon:"ti-snowflake",                url:"pickingfc.html",        bg:"#d5f2f8", fg:"#1aa3bd" },
+  { name:"Loading",            icon:"ti-truck-loading",            url:"loading.html",          bg:"#e7ddfb", fg:"#7c5ce0" },
+  { name:"Model Monitor",      icon:"ti-device-desktop-analytics", url:"monitor.html",          bg:"#fbdaea", fg:"#d8477f" }
 ];
 
-/* ── Render cards ── */
-const grid = document.getElementById('grid');
-grid.innerHTML = APPS.map(a => `
-  <a class="card" href="${a.url}">
-    <div class="tile"><i class="ti ${a.icon}"></i></div>
-    <h2>${a.name}</h2>
-    <p>${a.desc}</p>
+document.getElementById('grid').innerHTML = APPS.map(a => `
+  <a class="app" href="${a.url}">
+    <div class="tile" style="background:${a.bg}"><i class="ti ${a.icon}" style="color:${a.fg}"></i></div>
+    <span>${a.name}</span>
   </a>`).join('');
 
-/* ── Render drawer nav ── */
-const nav = document.getElementById('drawerNav');
-nav.innerHTML =
+document.getElementById('drawerNav').innerHTML =
   `<a href="index.html" class="active"><i class="ti ti-home"></i> Dashboard</a>` +
   APPS.map(a => `<a href="${a.url}"><i class="ti ${a.icon}"></i> ${a.name}</a>`).join('');
 
-/* ── Drawer open/close ── */
-const drawer  = document.getElementById('drawer');
-const overlay = document.getElementById('overlay');
-document.getElementById('menuBtn').addEventListener('click', () => {
-  drawer.classList.add('open');
-  overlay.classList.add('open');
-});
-overlay.addEventListener('click', () => {
-  drawer.classList.remove('open');
-  overlay.classList.remove('open');
-});
+const drawer=document.getElementById('drawer'), overlay=document.getElementById('overlay');
+document.getElementById('menuBtn').addEventListener('click',()=>{drawer.classList.add('open');overlay.classList.add('open');});
+overlay.addEventListener('click',()=>{drawer.classList.remove('open');overlay.classList.remove('open');});
 </script>
 </body>
 </html>
